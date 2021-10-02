@@ -25,8 +25,9 @@ use App\Http\Controllers\DeviceReadingController;
  * 2.) Get user via user id
  * 3.) Create user (POST)
  * 4.) update user (edit user profile)
- * 5.) delete user - TODO: find way to get PATCH working and change method to PATCH
+ * 5.) delete user - TODO: find way to get PATCH working and change method to PATCH (if we don't have time, will need to just rename route)
  */
+
 Route::get('/user/login', [UserController::class, 'logUserIn']); 
 Route::get('/user/{id}', [UserController::class, 'getUser']); 
 Route::post('/user', [UserController::class, 'createUser']); 
@@ -38,12 +39,13 @@ Route::put('/user/{id}', [UserController::class, 'updateUser']);
  * Router methods for calls related to device - review route naming
  * 1.) Get all devices that belong to user id (device mgmt page)
  * 2.) update device 
- * 3.) delete device - TODO: find way to get PATCH working and change method to PATCH
+ * 3.) delete device - TODO: find way to get PATCH working and change method to PATCH (optional)
  */
 
 Route::get('/devices/{id}', [DeviceController::class, 'getDevices']); 
 Route::put('/device', [DeviceController::class, 'updateDevice']);
 Route::put('/device/{id}', [DeviceController::class, 'deleteDevice']);
+Route::get('/device/{id}', [DeviceController::class, 'getDevice']);
 
 
 /**
@@ -52,7 +54,7 @@ Route::put('/device/{id}', [DeviceController::class, 'deleteDevice']);
   * 2.) get bucket by id (view bucket page)
   * 3.) create bucket (add new bucket) (POST)
   * 4.) update bucket
-  * 5.) delete/archive bucket - TODO: find way to get PATCH working and change method to PATCH
+  * 5.) delete/archive bucket - TODO: find way to get PATCH working and change method to PATCH (if we don't have time, will need to just rename route)
   */
 
 Route::get('/user/{id}/buckets', [BucketController::class, 'getBuckets']); 
@@ -61,18 +63,15 @@ Route::post('/bucket', [BucketController::class, 'createBucket']);
 Route::put('/bucket/{id}', [BucketController::class, 'updateBucket']); 
 //Route::put('/bucket/{id}', [BucketController::class, 'deleteBucket']);
 
-  /**
-   * Router methods for calls related to Plant - review route naming
-   * 1.) get single plant (view plant)
-   * 2.) get all plants of a bucket
-   * 3.) update plant
-   * 4.) create plant
-   * 5.) delete/archive plant - TODO: find way to get PATCH working and change method to PATCH
-   * TODO: add plant type (POST)
-   * TODO: API call to trefle.io to get plant types to populate dropdown (add plant) (GET)
-   * TODO: get plant types (get any user-inputted plant types to also populate dropdown on add plant)
-   * TODO: copy archived plant (POST)
-   */
+/**
+ * Router methods for calls related to Plant
+ * 1.) get single plant (view plant)
+ * 2.) get all plants of a bucket
+ * 3.) update plant
+ * 4.) create plant
+ * 5.) delete/archive plant - TODO: find way to get PATCH working and change method to PATCH (if we don't have time, will need to just rename route)
+ */
+
 Route::get('/plant/{id}', [PlantController::class, 'getPlant']); 
 Route::get('/bucket/{id}/plants', [PlantController::class, 'getPlants']); 
 Route::put('/plant/{id}', [PlantController::class, 'updatePlant']);
@@ -81,29 +80,47 @@ Route::post('/plant', [PlantController::class, 'createPlant']);
 //Route::post('/plantType', [PlantController::class, 'createPlantType']);
 //Route::get('/user/{id}/plantTypes', [PlantController::class, 'getPlantTypes']);
 
-  /**
-   * Router methods for calls related to device readings - review route naming
-   * 1.) Get current device reading (view bucket data - current)
-   * 2.) Send readings from ESP32 sensors
-   * TODO - get bucket history historical (between start and end dates for particular device)
-   * 
-   */
+/**
+ * Router methods for calls related to Plant Type - will need to create Model/Controller for plant type
+ * TODO: add plant type (POST)
+ * TODO: API call to trefle.io to get plant types to populate dropdown (add plant) (GET)
+ * TODO: get plant types (get any user-inputted plant types to also populate dropdown on add plant)
+ */
+
+//*************************** ADD CALLS HERE FOR PLANT TYPE ******************************************
+
+
+/**
+ * Router methods for calls related to device readings - review route naming
+ * 1.) Get current device reading (view bucket data - current)
+ * 2.) Send readings from ESP32 sensors
+ * TODO - get bucket history historical (between start and end dates for particular device)
+ */
+
 Route::get('/deviceReading/{id}', [DeviceReadingController::class, 'getCurrentDeviceReading']);
 Route::post('/deviceReading', [DeviceReadingController::class, 'createDeviceReading']);
 //Route::get('/deviceReading/historical/{id}', [DeviceReadingController::class, 'getHistoricalData']);
 
-  /**
-   * Router methods for calls related to notification settings
-   * 1.) Get notification settings for user
-   * 2.) update notification settings
-   * 3.) create notifications (when account created, default everything is on and time set to 8am)
-   */
+/**
+ * Router methods for calls related to notification settings
+ * 1.) Get notification settings for user
+ * 2.) update notification settings
+ * 3.) create notifications (when account created, default everything is on and time set to 8am)
+ * TODO: get notification log (adding this table to the db so will need a GET for it)
+ */
 Route::get('/notification/{id}', [NotificationController::class, 'getSettings']); //works
 Route::put('/notification/{id}', [NotificationController::class, 'updateSettings']);
 Route::post('/notification', [NotificationController::class, 'createSettings']); 
 
 /**
- * Changes TBD
+ * Router methods for calls related to notification log
+ * TODO: GET method to retrieve all logs associated with a user - will need its own Model/Controller
+ */
+
+ //*************************** ADD CALLS HERE FOR NOTIFICATION LOG ******************************************
+
+/**
+ * Changes TBD - this is for authentication (who can access the API)
  */
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

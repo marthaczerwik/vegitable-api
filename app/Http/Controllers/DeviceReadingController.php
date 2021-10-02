@@ -7,11 +7,20 @@ use App\Models\DeviceReading;
 
 class DeviceReadingController extends Controller
 {
-    //get most recent history row for bucket
+
+    /**
+     * to get the most recent device readings for a particular bucket
+     * TODO: change return to custom object with HTTP status code and message and device reading obj within it
+     * TODO: add error handling if device readings have error field not null (meaning the sensors are not working correctly)
+     */
     public function getCurrentDeviceReading($id){
         return DeviceReading::where('deviceId_fk', $id)->orderBy('deviceReadingId', 'desc')->first();
-
     }
+
+    /**
+     * To get historical data of a bucket
+     * TODO: write GET request to find all device readings for the particular bucket within a start and end date, and filtr by certain sensor
+     */
 
     /*
     public function getHistoricalData($id, $startDate, $endDate, $sensorValue){
@@ -23,7 +32,10 @@ class DeviceReadingController extends Controller
         ]);
     } */
 
-        public function createDeviceReading(Request $request){
+    /**
+     * To insert device readings from the ESP32 sensors to the db
+     */
+    public function createDeviceReading(Request $request){
         $deviceReading = new DeviceReading();
 
         $deviceReading->currentDateTime = now()->toDateTimeString(); 
