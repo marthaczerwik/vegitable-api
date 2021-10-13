@@ -20,12 +20,19 @@ class DeviceController extends Controller
     }
 
     /**
-     * To retrieve single device
+     * To retrieve single device that the user owns
      */
     public function getDevice($userId, $deviceId){
         return Device::where('userId_fk', $userId)
         ->where('localId', $deviceId)
         ->get();
+    }
+
+    /**
+     * To retrieve single device, to check if it exists before pairing
+     */
+    public function checkForDevice($deviceId){
+        return Device::find($deviceId);
     }
 
     /**

@@ -48,6 +48,7 @@ Route::get('/devices/{userId}', [DeviceController::class, 'getDevices']);
 Route::put('/device', [DeviceController::class, 'initializeDevice']);
 Route::put('/device/{deviceId}', [DeviceController::class, 'updateDevice']);
 Route::get('/user/{userId}/device/{deviceId}', [DeviceController::class, 'getDevice']);
+Route::get('/device/{deviceId}', [DeviceController::class, 'checkForDevice']);
 
 
 /**
