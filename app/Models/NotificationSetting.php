@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class NotificationSetting extends Model
 {
     use HasFactory;
 
-    protected $table = 'Notifications';
-    protected $primaryKey = 'notificationId';
+    protected $table = 'NotificationSettings';
+    protected $primaryKey = 'notificationSettingId';
     public $timestamps = false;
 
     protected $fillable =[
+        'localId',
         'dailyNotification',
         'dailyNotificationTime',
         'alertNotification',
@@ -25,8 +26,9 @@ class Notification extends Model
     ];
 
     protected $casts = [
+        'localId' => 'int',
         'userId_fk' => 'int',
-        'dailyNotification' => 'bool', //or should be int??
+        'dailyNotification' => 'bool',
         'alertNotification' => 'bool',
         'deviceNotification' => 'bool'
     ];

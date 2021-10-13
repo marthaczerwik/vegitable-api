@@ -16,6 +16,7 @@ class User extends Authenticatable
     public $timestamps = false;
 
     protected $fillable =[
+        'localId',
         'userEmail',
         'userPassword',
         'userFirstName',
@@ -24,6 +25,10 @@ class User extends Authenticatable
         'createDateTime',
         'lastUpdateDateTime',
         'archiveDateTime'
+    ];
+
+    protected $casts = [
+        'localId' => 'int'
     ];
 
    

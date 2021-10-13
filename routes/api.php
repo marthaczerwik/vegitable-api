@@ -6,7 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\BucketController;
 use App\Http\Controllers\PlantController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PlantTypeController;
+use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\NotificationLogController;
 use App\Http\Controllers\DeviceReadingController;
 /*
 |--------------------------------------------------------------------------
@@ -42,10 +44,10 @@ Route::put('/user/{id}', [UserController::class, 'updateUser']);
  * 3.) delete device - TODO: find way to get PATCH working and change method to PATCH (optional)
  */
 
-Route::get('/devices/{id}', [DeviceController::class, 'getDevices']); 
-Route::put('/device', [DeviceController::class, 'updateDevice']);
-Route::put('/device/{id}', [DeviceController::class, 'deleteDevice']);
-Route::get('/device/{id}', [DeviceController::class, 'getDevice']);
+Route::get('/devices/{userId}', [DeviceController::class, 'getDevices']); 
+Route::put('/device', [DeviceController::class, 'initializeDevice']);
+Route::put('/device/{deviceId}', [DeviceController::class, 'updateDevice']);
+Route::get('/user/{userId}/device/{deviceId}', [DeviceController::class, 'getDevice']);
 
 
 /**
@@ -57,11 +59,11 @@ Route::get('/device/{id}', [DeviceController::class, 'getDevice']);
   * 5.) delete/archive bucket - TODO: find way to get PATCH working and change method to PATCH (if we don't have time, will need to just rename route)
   */
 
-Route::get('/user/{id}/buckets', [BucketController::class, 'getBuckets']); 
-Route::get('/bucket/{id}', [BucketController::class, 'getBucket']);
+Route::get('/user/{userId}/buckets', [BucketController::class, 'getBuckets']); 
+Route::get('/user/{userId}/bucket/{bucketId}', [BucketController::class, 'getBucket']);
 Route::post('/bucket', [BucketController::class, 'createBucket']); 
-Route::put('/bucket/{id}', [BucketController::class, 'updateBucket']); 
-//Route::put('/bucket/{id}', [BucketController::class, 'deleteBucket']);
+Route::put('/user/{userId}/bucket/{bucketId}', [BucketController::class, 'updateBucket']); 
+Route::put('/delete/user/{userId}/bucket/{bucketId}', [BucketController::class, 'deleteBucket']);
 
 /**
  * Router methods for calls related to Plant
@@ -72,9 +74,9 @@ Route::put('/bucket/{id}', [BucketController::class, 'updateBucket']);
  * 5.) delete/archive plant - TODO: find way to get PATCH working and change method to PATCH (if we don't have time, will need to just rename route)
  */
 
-Route::get('/plant/{id}', [PlantController::class, 'getPlant']); 
-Route::get('/bucket/{id}/plants', [PlantController::class, 'getPlants']); 
-Route::put('/plant/{id}', [PlantController::class, 'updatePlant']);
+Route::get('/user/{userId}/plant/{plantId}', [PlantController::class, 'getPlant']); 
+Route::get('/user/{userId}/bucket/{bucketId}/plants', [PlantController::class, 'getPlants']); 
+Route::put('/user/{userId}/plant/{plantId}', [PlantController::class, 'updatePlant']);
 Route::post('/plant', [PlantController::class, 'createPlant']);
 //Route::put('/plant/{id}', [PlantController::class, 'deletePlant']);
 //Route::post('/plantType', [PlantController::class, 'createPlantType']);
@@ -82,12 +84,13 @@ Route::post('/plant', [PlantController::class, 'createPlant']);
 
 /**
  * Router methods for calls related to Plant Type - will need to create Model/Controller for plant type
- * TODO: add plant type (POST)
- * TODO: API call to trefle.io to get plant types to populate dropdown (add plant) (GET)
- * TODO: get plant types (get any user-inputted plant types to also populate dropdown on add plant)
+ * 1.) create plant type 
+ * 2.) get single plant type
+ * 3.) get all plant types of a user
  */
-
-//*************************** ADD CALLS HERE FOR PLANT TYPE ******************************************
+Route::post('/plantType', [PlantTypeController::class, 'createPlantType']);
+Route::get('user/{userId}/plantType/{plantTypeId}', [PlantTypeController::class, 'getPlantType']); 
+Route::get('/user/{userId}', [PlantTypeController::class, 'getPlantTypes']); 
 
 
 /**
@@ -108,16 +111,19 @@ Route::post('/deviceReading', [DeviceReadingController::class, 'createDeviceRead
  * 3.) create notifications (when account created, default everything is on and time set to 8am)
  * TODO: get notification log (adding this table to the db so will need a GET for it)
  */
-Route::get('/notification/{id}', [NotificationController::class, 'getSettings']); //works
-Route::put('/notification/{id}', [NotificationController::class, 'updateSettings']);
-Route::post('/notification', [NotificationController::class, 'createSettings']); 
+Route::get('/settings/{userId}', [NotificationSettingController::class, 'getSettings']); //works
+Route::put('/settings/{userId}', [NotificationSettingController::class, 'updateSettings']);
+Route::post('/settings', [NotificationSettingController::class, 'createSettings']); 
 
 /**
  * Router methods for calls related to notification log
- * TODO: GET method to retrieve all logs associated with a user - will need its own Model/Controller
+ * 1.) insert notification log
+ * 2.) get all logs associated with a user's bucket
  */
 
- //*************************** ADD CALLS HERE FOR NOTIFICATION LOG ******************************************
+Route::post('/log', [NotificationLogController::class, 'createLog']);
+Route::get('/log/{userId}/{bucketId}', [NotificationLogController::class, 'getLogs']);
+
 
 /**
  * Changes TBD - this is for authentication (who can access the API)

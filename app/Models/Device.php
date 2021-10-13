@@ -14,6 +14,7 @@ class Device extends Model
     public $timestamps = false;
 
     protected $fillable =[
+        'localId',
         'deviceName',
         'createDateTime',
         'lastUpdateDateTime',
@@ -22,6 +23,7 @@ class Device extends Model
     ];
 
     protected $casts = [
+        'localId' => 'int',
         'userId_fk' => 'int'
     ];
 }

@@ -10,7 +10,6 @@ class DeviceReadingController extends Controller
 
     /**
      * to get the most recent device readings for a particular bucket
-     * TODO: change return to custom object with HTTP status code and message and device reading obj within it
      * TODO: add error handling if device readings have error field not null (meaning the sensors are not working correctly)
      */
     public function getCurrentDeviceReading($id){

@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bucket extends Model
+class PlantType extends Model
 {
     use HasFactory;
 
+    protected $table = 'PlantTypes';
+    protected $primaryKey = 'plantTypeId';
     public $timestamps = false;
-    protected $table = 'Buckets';
-    protected $primaryKey = 'bucketId';
-
+    
     protected $fillable =[
         'localId',
-        'bucketName',
+        'plantTypeName',
         'temperatureMin',
         'temperatureMax',
         'phMin',
@@ -28,16 +28,11 @@ class Bucket extends Model
         'humidityMax',
         'createDateTime',
         'lastUpdateDateTime',
-        'archiveDateTime',
-        'imageURL',
-        'userId_fk',
-        'deviceId_fk'
+        'userId_fk'
     ];
 
     protected $casts = [
         'localId' => 'int',
-        'userId_fk' => 'int',
-        'deviceId_fk' => 'int',
         'temperatureMin' => 'float',
         'temperatureMax' => 'float',
         'phMin' => 'float',
@@ -47,6 +42,7 @@ class Bucket extends Model
         'lightMin' => 'float',
         'lightMax' => 'float',
         'humidityMin' => 'float',
-        'humidityMax' => 'float'
+        'humidityMax' => 'float',
+        'userId_fk' => 'int'
     ];
 }

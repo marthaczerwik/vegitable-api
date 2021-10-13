@@ -23,10 +23,8 @@ class UserController extends Controller
 
     /**
      * For creating a new user
-     * TODO: change return to custom object with HTTP status code and message and user id
      * TODO: Error handling if email already exists,
      * TODO: password hashing before storing in db
-     * TODO: form validation (optional if front end handles this)
      */
     public function createUser(Request $request){
         $user = new User();
@@ -45,7 +43,6 @@ class UserController extends Controller
 
     /**
      * Return single user to view their profile
-     * TODO: confirm if need to change return to custom object with HTTP status code, message, and user object within that object
      */
     public function getUser($id){
         return User::find($id);
@@ -54,9 +51,8 @@ class UserController extends Controller
     /**
      * Update fields when user edits their profile
      * make sure front end displays password (hidden) otherwise will pass in password as null
-     * TODO: validation (optional if front end handles this)
-     * TODO: change return to custom object with HTTP status code and message and user id
      * TODO: error handling if cannot be saved to db, if user id doesn't exist (optional)
+     * TODO: determine if updates done locally or here (if locally, change datetimes)
      */ 
     public function updateUser(Request $request, $id){
         $user = User::find($id);

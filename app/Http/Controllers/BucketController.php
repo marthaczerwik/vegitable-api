@@ -11,12 +11,10 @@ class BucketController extends Controller
 {
     /**
      * Function to update the thresholds (min and max) for the bucket overall, based on the threshold values of all the plants within it.
-     * This is to ensure that the bucket's overall thresholds can support all plants.
-     * Retrieves all plants associated with that bucket and grabs a collection of min and max values, setting the overall bucket min/max appropriately.
-     * TODO: add error handling if the newly added plant does not work with the bucket thresholds
-     * TODO: change return to custom object with HTTP status code and message and bucket id
+     * TODO: move to android code
      */
-    public function updateThresholds($bucketId){
+    /*
+     public function updateThresholds($bucketId){
 
         $bucket = Bucket::find($bucketId);
 
@@ -37,13 +35,10 @@ class BucketController extends Controller
         }
 
         return $bucket;
-    }
+    }*/
 
     /**
      * For creating a new bucket
-     * TODO: error handling if bucket already exists (optional)
-     * TODO: validation (optional if front end handles this)
-     * TODO: change return to custom object with HTTP status code and message and bucket id
      * TODO: error handling if cannot be saved to db
      */
     public function createBucket(Request $request){
@@ -51,9 +46,12 @@ class BucketController extends Controller
         $bucket = new Bucket();
 
         //assign values based on request input
+        $bucket->localId = $request->input('id');
         $bucket->bucketName = $request->input('bucketName');
-        $bucket->createDateTime = now()->toDateTimeString(); 
-        $bucket->lastUpdateDateTime = now()->toDateTimeString();
+        //$bucket->createDateTime = now()->toDateTimeString(); 
+        //$bucket->lastUpdateDateTime = now()->toDateTimeString();
+        $bucket->createDateTime = $request-> input('createDateTime');
+        $bucket->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
         $bucket->imageURL = $request->input('imageURL');
         $bucket->userId_fk = $request->input('userId_fk');
         $bucket->deviceId_fk = $request->input('deviceId_fk');
@@ -66,60 +64,65 @@ class BucketController extends Controller
 
     /**
      * To update a bucket when on edit bucket page 
-     * TODO: validation (optional if front end handles this)
-     * TODO: change return to custom object with HTTP status code and message and bucket id
      * TODO: error handling if cannot be saved to db, if bucket id doesn't exist (optional)
      */
-    public function updateBucket(Request $request, $id){
+    public function updateBucket(Request $request, $userId, $bucketId){
         //find bucket
-        $updatedBucket = Bucket::find($id);
+        $bucket = Bucket::where('userId_fk', $userId)
+        ->where('localId', $bucketId)
+        ->get();
 
         //update bucket based on request input
         $updatedBucket->bucketName = $request->input('bucketName');
         $updatedBucket->imageURL = $request->input('imageURL');
-        $updatedBucket->lastUpdateDateTime = now()->toDateTimeString();
+        $updatedBucket->lastUpdateDateTime = $request->input('lastUpdateDateTime');
         $updatedBucket->deviceId_fk = $request->input('deviceId_fk');
 
+        /* MOVING THIS TO ANDROID CODE
         //TODO: add try catch to ensure nothing gets saved unless update is possible (if existing plants have incompatible min/max with the new bucket min/max, need to return error)
             
             //update the bucket threshold values
             $updatedBucket = $this->updateThresholds($id);
+        */
 
-            //save the updated bucket to the db
-            $updatedBucket->save();
+        //save the updated bucket to the db
+        $updatedBucket->save();
 
         return response()->json($updatedBucket);
     }
 
     /**
      * Return single bucket to view bucket data
-     * TODO: confirm if need to change return to custom object with HTTP status code, message, and bucket object within that object
      */    
-    public function getBucket($id){
-        return Bucket::find($id);
+    public function getBucket($userId, $bucketId){
+        return Bucket::where('userId_fk', $userId)
+        ->where('localId', $bucketId)
+        ->get();
     }
 
      /**
       * To retrieve all buckets from one user
-      * TODO: confirm if need to change return to custom object with HTTP status code, message, and bucket array within that object
       */
-    public function getBuckets($id){
-        $buckets = Bucket::where('userId_fk', $id)->get();
+    public function getBuckets($userId){
+        $buckets = Bucket::where('userId_fk', $userId)->get();
         return response()->json($buckets);
     }
 
     /**
      * To archive a bucket
-     * TODO: change return to custom object with HTTP status code and message 
      * TODO: error handling if cannot be saved to db, if bucket id doesn't exist (optional)
      */
-    public function deleteBucket($id){
+    public function deleteBucket(Request $request, $userId, $bucketId){
         //find bucket
-        $bucket = Bucket::find($id);
+        $bucket = Bucket::where('userId_fk', $userId)
+        ->where('localId', $bucketId)
+        ->get();
 
         //archive
-        $bucket->archiveDateTime = now()->toDateTimeString();
-        $bucket->lastUpdateDateTime = now()->toDateTimeString();
+        //$bucket->archiveDateTime = now()->toDateTimeString();
+        //$bucket->lastUpdateDateTime = now()->toDateTimeString();
+        $bucket->archiveDateTime = $request-> input('archiveDateTime');
+        $bucket->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
 
         //save updated bucket to db
         $bucket->save();

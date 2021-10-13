@@ -14,6 +14,7 @@ class Plant extends Model
     public $timestamps = false;
     
     protected $fillable =[
+        'localId',
         'plantType',
         'plantName',
         'temperatureMin',
@@ -31,10 +32,12 @@ class Plant extends Model
         'lastUpdateDateTime',
         'archiveDateTime',
         'imageURL',
-        'bucketId_fk'
+        'bucketId_fk',
+        'userId_fk'
     ];
 
     protected $casts = [
+        'localId' => 'int',
         'bucketId_fk' => 'int',
         'temperatureMin' => 'float',
         'temperatureMax' => 'float',
@@ -45,6 +48,7 @@ class Plant extends Model
         'lightMin' => 'float',
         'lightMax' => 'float',
         'humidityMin' => 'float',
-        'humidityMax' => 'float'
+        'humidityMax' => 'float',
+        'userId_fk' => 'int'
     ];
 }
