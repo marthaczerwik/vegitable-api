@@ -36,7 +36,7 @@ Route::get('/user/{id}', [UserController::class, 'getUser']);
 Route::post('/user', [UserController::class, 'createUser']); 
 Route::put('/user/{id}', [UserController::class, 'updateUser']); 
 //Route::put('/user/{id}', [UserController::class, 'deleteUser']);
-Route::get('/login', [UserController::class, 'findUser']);
+Route::get('/existingUser', [UserController::class, 'findUser']);
 
 
 /**
