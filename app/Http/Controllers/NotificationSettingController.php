@@ -45,7 +45,7 @@ class NotificationSettingController extends Controller
      */ 
     public function updateSettings(Request $request, $userId){
         //find settings
-        $settings = NotificationSetting::where('userId_fk', $userId)->get();
+        $settings = NotificationSetting::where('userId_fk', $userId)->first();
         
         //update based on request input
         $settings->localId = $request->input('notificationSettingId');

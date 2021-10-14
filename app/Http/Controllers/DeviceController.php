@@ -67,7 +67,7 @@ class DeviceController extends Controller
         //find device
         $device = Device::where('userId_fk', $userId)
         ->where('localId', $deviceId)
-        ->get();
+        ->first();
 
         if ($request->archive == 'true'){
             //remove foreign key (user no longer attached to this device)

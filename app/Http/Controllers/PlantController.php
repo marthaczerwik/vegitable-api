@@ -107,7 +107,9 @@ class PlantController extends Controller
     public function updatePlant(Request $request, $userId, $plantId){
 
         //find plant in the db
-        $plant = Plant::find($id);
+        $plant = Plant::where('userId_fk', $userId)
+        ->where('localId', $plantId)
+        ->first();
 
         //update values based on request input
         $plant->localId = $request->input('plantId');
@@ -155,7 +157,7 @@ class PlantController extends Controller
         //find the requested plant
         $plant = Plant::where('userId_fk', $userId)
         ->where('localId', $plantId)
-        ->get();
+        ->first();
 
         //update the archive date
         //$plant->archiveDateTime = now()->toDateTimeString();

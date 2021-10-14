@@ -68,15 +68,17 @@ class BucketController extends Controller
      */
     public function updateBucket(Request $request, $userId, $bucketId){
         //find bucket
-        $bucket = Bucket::where('userId_fk', $userId)
+        $updatedBucket = Bucket::where('userId_fk', $userId)
         ->where('localId', $bucketId)
-        ->get();
+        ->first();
+
 
         //update bucket based on request input
         $updatedBucket->bucketName = $request->input('bucketName');
         $updatedBucket->imageURL = $request->input('imageURL');
         $updatedBucket->lastUpdateDateTime = $request->input('lastUpdateDateTime');
         $updatedBucket->deviceId_fk = $request->input('deviceId_fk');
+
 
         /* MOVING THIS TO ANDROID CODE
         //TODO: add try catch to ensure nothing gets saved unless update is possible (if existing plants have incompatible min/max with the new bucket min/max, need to return error)
@@ -87,6 +89,7 @@ class BucketController extends Controller
 
         //save the updated bucket to the db
         $updatedBucket->save();
+        //echo $updatedBucket;
 
         return response()->json($updatedBucket);
     }
@@ -116,7 +119,7 @@ class BucketController extends Controller
         //find bucket
         $bucket = Bucket::where('userId_fk', $userId)
         ->where('localId', $bucketId)
-        ->get();
+        ->first();
 
         //archive
         //$bucket->archiveDateTime = now()->toDateTimeString();
