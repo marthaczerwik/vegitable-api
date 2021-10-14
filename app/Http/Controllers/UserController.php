@@ -48,6 +48,16 @@ class UserController extends Controller
         return User::find($id);
     }
 
+
+    /**
+     * Return single user if their email exists
+     */
+    public function findUser(Request $request){
+        $email = urldecode($request->email);
+        $user = User::where('userEmail', $email)->count();
+        return $user;
+    }
+
     /**
      * Update fields when user edits their profile
      * make sure front end displays password (hidden) otherwise will pass in password as null

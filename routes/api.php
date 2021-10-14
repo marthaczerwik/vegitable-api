@@ -28,6 +28,7 @@ use App\Http\Controllers\DeviceReadingController;
  * 3.) Create user (POST)
  * 4.) update user (edit user profile)
  * 5.) delete user - TODO: find way to get PATCH working and change method to PATCH (if we don't have time, will need to just rename route)
+ * 6.) get user by email
  */
 
 Route::get('/user/login', [UserController::class, 'logUserIn']); 
@@ -35,6 +36,7 @@ Route::get('/user/{id}', [UserController::class, 'getUser']);
 Route::post('/user', [UserController::class, 'createUser']); 
 Route::put('/user/{id}', [UserController::class, 'updateUser']); 
 //Route::put('/user/{id}', [UserController::class, 'deleteUser']);
+Route::get('/login', [UserController::class, 'findUser']);
 
 
 /**
