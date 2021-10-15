@@ -81,9 +81,7 @@ Route::get('/user/{userId}/plant/{plantId}', [PlantController::class, 'getPlant'
 Route::get('/user/{userId}/bucket/{bucketId}/plants', [PlantController::class, 'getPlants']); 
 Route::put('/user/{userId}/plant/{plantId}', [PlantController::class, 'updatePlant']);
 Route::post('/plant', [PlantController::class, 'createPlant']);
-//Route::put('/plant/{id}', [PlantController::class, 'deletePlant']);
-//Route::post('/plantType', [PlantController::class, 'createPlantType']);
-//Route::get('/user/{id}/plantTypes', [PlantController::class, 'getPlantTypes']);
+Route::put('/delete/user/{userId}/plant/{plantId}', [PlantController::class, 'deletePlant']);
 
 /**
  * Router methods for calls related to Plant Type - will need to create Model/Controller for plant type
@@ -92,7 +90,7 @@ Route::post('/plant', [PlantController::class, 'createPlant']);
  * 3.) get all plant types of a user
  */
 Route::post('/plantType', [PlantTypeController::class, 'createPlantType']);
-Route::get('user/{userId}/plantType/{plantTypeId}', [PlantTypeController::class, 'getPlantType']); 
+Route::get('/user/{userId}/plantType/{plantTypeId}', [PlantTypeController::class, 'getPlantType']); 
 Route::get('/user/{userId}', [PlantTypeController::class, 'getPlantTypes']); 
 
 
@@ -100,19 +98,18 @@ Route::get('/user/{userId}', [PlantTypeController::class, 'getPlantTypes']);
  * Router methods for calls related to device readings - review route naming
  * 1.) Get current device reading (view bucket data - current)
  * 2.) Send readings from ESP32 sensors
- * TODO - get bucket history historical (between start and end dates for particular device)
+ * 3.) get bucket history historical (between start and end dates for particular device)
  */
 
 Route::get('/deviceReading/{id}', [DeviceReadingController::class, 'getCurrentDeviceReading']);
 Route::post('/deviceReading', [DeviceReadingController::class, 'createDeviceReading']);
-//Route::get('/deviceReading/historical/{id}', [DeviceReadingController::class, 'getHistoricalData']);
+Route::get('/deviceReading/historical/{id}', [DeviceReadingController::class, 'getHistoricalData']); //e.g., deviceReading/historical/1?startDate=2021-09-16&endDate=2021-09-28
 
 /**
  * Router methods for calls related to notification settings
  * 1.) Get notification settings for user
  * 2.) update notification settings
  * 3.) create notifications (when account created, default everything is on and time set to 8am)
- * TODO: get notification log (adding this table to the db so will need a GET for it)
  */
 Route::get('/settings/{userId}', [NotificationSettingController::class, 'getSettings']); //works
 Route::put('/settings/{userId}', [NotificationSettingController::class, 'updateSettings']);

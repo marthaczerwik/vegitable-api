@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DeviceReading;
+use DateTime;
+use DateInterval;
 
 class DeviceReadingController extends Controller
 {
@@ -21,15 +23,21 @@ class DeviceReadingController extends Controller
      * TODO: write GET request to find all device readings for the particular bucket within a start and end date, and filtr by certain sensor
      */
 
-    /*
-    public function getHistoricalData($id, $startDate, $endDate, $sensorValue){
-        return DeviceReading::where([
-            ['bucketId_fk', $id],
-            ['currentDateTime', '>=', $startDate],
-            ['currentDateTime', '<=', $endDate],
-            []
-        ]);
-    } */
+    
+    public function getHistoricalData($id, Request $request){
+        $start = new DateTime(urldecode($request->startDate));
+        $end = new DateTime(urldecode($request->endDate));
+
+        //add 1 day to end variable so it includes that whole day as well
+        $endPlusOne = $end->add(new DateInterval('P1D'));
+
+        $readings = DeviceReading::where('deviceId_fk', $id)
+        ->where('currentDateTime', '>=', $start)
+        ->where('currentDateTime', '<=', $endPlusOne)
+        ->get();
+        return response()->json($readings);
+
+    } 
 
     /**
      * To insert device readings from the ESP32 sensors to the db
