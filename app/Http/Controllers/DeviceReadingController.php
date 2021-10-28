@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\DeviceReading;
 use DateTime;
 use DateInterval;
+use Illuminate\Support\Facades\DB;
+
 
 class DeviceReadingController extends Controller
 {
@@ -20,10 +22,8 @@ class DeviceReadingController extends Controller
 
     /**
      * To get historical data of a bucket
-     * TODO: write GET request to find all device readings for the particular bucket within a start and end date, and filtr by certain sensor
      */
 
-    
     public function getHistoricalData($id, Request $request){
         $start = new DateTime(urldecode($request->startDate));
         $end = new DateTime(urldecode($request->endDate));
@@ -31,10 +31,13 @@ class DeviceReadingController extends Controller
         //add 1 day to end variable so it includes that whole day as well
         $endPlusOne = $end->add(new DateInterval('P1D'));
 
-        $readings = DeviceReading::where('deviceId_fk', $id)
-        ->where('currentDateTime', '>=', $start)
-        ->where('currentDateTime', '<=', $endPlusOne)
-        ->get();
+        $readings = DeviceReading::selectRaw("date(currentDateTime) as dailyAverage, avg(phValue) as phValue, avg(temperatureValue) as temperatureValue, avg(ppmValue) as ppmValue, avg(waterValue) as waterValue, avg(humidityValue) as humidityValue, avg(lightValue) as lightValue")
+            ->where('deviceId_fk', $id)
+            ->where('currentDateTime', '>=', $start)
+            ->where('currentDateTime', '<=', $endPlusOne)
+            ->groupBy(('dailyAverage'))
+            ->get();
+            
         return response()->json($readings);
 
     } 
