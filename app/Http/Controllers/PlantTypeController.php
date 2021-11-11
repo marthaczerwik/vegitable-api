@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PlantType;
+use App\Models\DefaultPlantType;
 
 class PlantTypeController extends Controller
 {
@@ -56,8 +57,37 @@ class PlantTypeController extends Controller
       * To retrieve all plant types the user has created
       */
     public function getPlantTypes($userId){
-        $plantTypes = PlantType::where('userId_fk', $userId)->get();
+        $plantTypes = PlantType::where('userId_fk', $userId)
+        ->orderBy('plantTypeName')
+        ->get();
         return response()->json($plantTypes);
+    }
+
+    /**
+     * To retrieve all plant types that are available to all users
+     */
+    public function getDefaultPlantTypes(){
+        //$plantTypes = DefaultPlantType::all();
+        
+        $plantTypes = DefaultPlantType::selectRaw("plantTypeId, 0 as localId, plantTypeName, temperatureMin, temperatureMax, phMin, phMax, ppmMin, ppmMax, lightMin, lightMax, humidityMin, humidityMax, createDateTime, lastUpdateDateTime, 0 as userId_fk")
+        ->orderBy('plantTypeName')
+        ->get();
+        return response()->json($plantTypes);
+
+    }
+
+    /**
+      * To retrieve one default plant type by name
+      */
+    public function getDefaultPlantType(Request $request){
+       // return DefaultPlantType::where('plantTypeName', urldecode($request->name))
+       // ->get();
+
+         $plantType = DefaultPlantType::selectRaw("plantTypeId, plantTypeName, phMin, phMax, ppmMin, ppmMax, temperatureMin, temperatureMax, humidityMin, humidityMax, lightMin, lightMax, createDateTime, lastUpdateDateTime, 0 as userId_fk")
+            ->where('plantTypeName', urldecode($request->name))
+            ->first();
+        
+            return response()->json($plantType);
     }
 
 }

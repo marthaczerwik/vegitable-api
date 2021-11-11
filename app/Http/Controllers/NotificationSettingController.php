@@ -23,6 +23,7 @@ class NotificationSettingController extends Controller
         $settings->deviceNotification = $request->input('deviceNotification');
         $settings->createDateTime = $request-> input('createDateTime');
         $settings->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
+        $settings->archiveDateTime = $request->input('archiveDateTime');
         $settings->userId_fk = $request->input('userId_fk');
         
         //insert to db
@@ -36,7 +37,7 @@ class NotificationSettingController extends Controller
      * Return user's notification settings
      */
     public function getSettings($userId){
-        return NotificationSetting::where('userId_fk', $userId)->get();
+        return NotificationSetting::where('userId_fk', $userId)->first();
     }
 
     /**
@@ -48,7 +49,7 @@ class NotificationSettingController extends Controller
         $settings = NotificationSetting::where('userId_fk', $userId)->first();
         
         //update based on request input
-        $settings->localId = $request->input('notificationSettingId');
+        //$settings->localId = $request->input('notificationSettingId');
         $settings->dailyNotification = $request->input('dailyNotification');
         $settings->dailyNotificationTime = $request->input('dailyNotificationTime');
         $settings->alertNotification = $request->input('alertNotification');

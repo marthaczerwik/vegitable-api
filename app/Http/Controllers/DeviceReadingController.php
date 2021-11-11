@@ -21,6 +21,31 @@ class DeviceReadingController extends Controller
     }
 
     /**
+     * To get all device readings since the last saved reading in local db
+     */
+    public function getLatestDeviceReadings($id){
+    /*
+        if ($request->lastReadingTime == null){
+            $readings = DeviceReading::where('deviceId_fk', $id)
+            ->orderBy('currentDateTime', 'desc')
+            ->take(50)
+            ->get();
+        } else {
+            $readings = DeviceReading::where('deviceId_fk', $id)
+            ->where('currentDateTime', '>', $request->lastReadingTime)
+            ->orderBy('currentDateTime', 'desc')
+            ->take(50)
+            ->get();
+        }*/
+        
+        $readings = DeviceReading::where('deviceId_fk', $id)
+            ->orderBy('currentDateTime', 'desc')
+            ->take(50)
+            ->get();
+        return response()->json($readings);
+    }
+
+    /**
      * To get historical data of a bucket
      */
 
@@ -31,7 +56,7 @@ class DeviceReadingController extends Controller
         //add 1 day to end variable so it includes that whole day as well
         $endPlusOne = $end->add(new DateInterval('P1D'));
 
-        $readings = DeviceReading::selectRaw("0 as deviceReadingId, date(currentDateTime) as currentDateTimeStr, avg(phValue) as phValue, avg(temperatureValue) as temperatureValue, avg(ppmValue) as ppmValue, avg(waterValue) as waterValue, avg(humidityValue) as humidityValue, avg(lightValue) as lightValue, NULL as errorReading, 0 as deviceId_fk")
+        $readings = DeviceReading::selectRaw("0 as deviceReadingId, timestamp(date(currentDateTime)) as currentDateTimeStr, avg(phValue) as phValue, avg(temperatureValue) as temperatureValue, avg(ppmValue) as ppmValue, avg(waterValue) as waterValue, avg(humidityValue) as humidityValue, avg(lightValue) as lightValue, NULL as errorReading, 0 as deviceId_fk")
             ->where('deviceId_fk', $id)
             ->where('currentDateTime', '>=', $start)
             ->where('currentDateTime', '<=', $endPlusOne)

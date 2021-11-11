@@ -74,24 +74,10 @@ class PlantController extends Controller
         $plant->plantPhase = $request->input('plantPhase');
         $plant->createDateTime = $request-> input('createDateTime');
         $plant->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
+        $plant->archiveDateTime = $request->input('archiveDateTime');
         $plant->imageURL = $request->input('imageURL');
         $plant->bucketId_fk = $request->input('bucketId_fk');
-        
-        /* moving to android code
-        //TODO: add try catch to ensure nothing gets saved unless update is possible
-
-            //get bucket the plant is in
-            $bucket = Bucket::find($request->input('bucketId_fk'));
-            
-            //update the bucket threshold values
-            $bucket = $this->updateThresholds($request->input('bucketId_fk'));
-
-            //save the created plant in the db
-            $plant->save();
-
-            //save the updated bucket to the db
-            $bucket->save();
-        */
+        $plant->userId_fk = $request->input('userId_fk');
 
         //save the created plant in the db
         $plant->save();

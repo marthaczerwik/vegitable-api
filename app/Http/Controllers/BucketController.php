@@ -48,8 +48,6 @@ class BucketController extends Controller
         //assign values based on request input
         $bucket->localId = $request->input('bucketId');
         $bucket->bucketName = $request->input('bucketName');
-        //$bucket->createDateTime = now()->toDateTimeString(); 
-        //$bucket->lastUpdateDateTime = now()->toDateTimeString();
         $bucket->createDateTime = $request-> input('createDateTime');
         $bucket->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
         $bucket->imageURL = $request->input('imageURL');

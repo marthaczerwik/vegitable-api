@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -16,8 +17,11 @@ class UserController extends Controller
         $email = urldecode($request->email);
         $password = urldecode($request->password);
 
-        $user = User::where('userEmail', $email)->where('userPassword', $password)->first();
-        return response()->json($user);
+        $user = User::where('userEmail', $email)->first();
+
+        if (Hash::check($password, $user->userPassword)) {
+            return response()->json($user);
+        } 
     }
 
 
@@ -30,7 +34,7 @@ class UserController extends Controller
         $user = new User();
 
         $user->userEmail = $request->input('userEmail');
-        $user->userPassword = $request->input('userPassword');
+        $user->userPassword = Hash::make($request->input('userPassword'));
         $user->userFirstName = $request->input('userFirstName');
         $user->userLastName = $request->input('userLastName');
         $user->imageURL = $request->input('imageURL');

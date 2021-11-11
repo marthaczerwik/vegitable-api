@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PlantType extends Model
+class DefaultPlantType extends Model
 {
     use HasFactory;
 
-    protected $table = 'PlantTypes';
+    protected $table = 'DefaultPlantTypes';
     protected $primaryKey = 'plantTypeId';
     public $timestamps = false;
     
     protected $fillable =[
-        'localId',
         'plantTypeName',
         'temperatureMin',
         'temperatureMax',
@@ -27,8 +26,7 @@ class PlantType extends Model
         'humidityMin',
         'humidityMax',
         'createDateTime',
-        'lastUpdateDateTime',
-        'userId_fk'
+        'lastUpdateDateTime'
     ];
 
     protected $casts = [
@@ -41,7 +39,6 @@ class PlantType extends Model
         'lightMin' => 'float',
         'lightMax' => 'float',
         'humidityMin' => 'float',
-        'humidityMax' => 'float',
-        'userId_fk' => 'int'
+        'humidityMax' => 'float'
     ];
 }

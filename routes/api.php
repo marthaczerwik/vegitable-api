@@ -48,7 +48,7 @@ Route::get('/existingUser', [UserController::class, 'findUser']);
 
 Route::get('/devices/{userId}', [DeviceController::class, 'getDevices']); 
 Route::put('/device', [DeviceController::class, 'initializeDevice']);
-Route::put('/device/{deviceId}', [DeviceController::class, 'updateDevice']);
+Route::put('/user/{userId}/device/{deviceId}', [DeviceController::class, 'updateDevice']);
 Route::get('/user/{userId}/device/{deviceId}', [DeviceController::class, 'getDevice']);
 Route::get('/device/{deviceId}', [DeviceController::class, 'checkForDevice']);
 
@@ -91,7 +91,9 @@ Route::put('/delete/user/{userId}/plant/{plantId}', [PlantController::class, 'de
  */
 Route::post('/plantType', [PlantTypeController::class, 'createPlantType']);
 Route::get('/user/{userId}/plantType/{plantTypeId}', [PlantTypeController::class, 'getPlantType']); 
-Route::get('/user/{userId}', [PlantTypeController::class, 'getPlantTypes']); 
+Route::get('/user/{userId}/plantTypes', [PlantTypeController::class, 'getPlantTypes']); 
+Route::get('/plantTypes', [PlantTypeController::class, 'getDefaultPlantTypes']); 
+Route::get('/plantType', [PlantTypeController::class, 'getDefaultPlantType']);
 
 
 /**
@@ -104,7 +106,7 @@ Route::get('/user/{userId}', [PlantTypeController::class, 'getPlantTypes']);
 Route::get('/deviceReading/{id}', [DeviceReadingController::class, 'getCurrentDeviceReading']);
 Route::post('/deviceReading', [DeviceReadingController::class, 'createDeviceReading']);
 Route::get('/deviceReading/historical/{id}', [DeviceReadingController::class, 'getHistoricalData']); //e.g., deviceReading/historical/1?startDate=2021-09-16&endDate=2021-09-28
-
+Route::get('/deviceReadings/{id}', [DeviceReadingController::class, 'getLatestDeviceReadings']); //e.g., deviceReading?lastReadingTime=2021-09-28 02:47:08
 /**
  * Router methods for calls related to notification settings
  * 1.) Get notification settings for user
@@ -122,7 +124,7 @@ Route::post('/settings', [NotificationSettingController::class, 'createSettings'
  */
 
 Route::post('/log', [NotificationLogController::class, 'createLog']);
-Route::get('/log/{userId}/{bucketId}', [NotificationLogController::class, 'getLogs']);
+Route::get('/logs/{userId}/{type}', [NotificationLogController::class, 'getLogs']);
 
 
 /**

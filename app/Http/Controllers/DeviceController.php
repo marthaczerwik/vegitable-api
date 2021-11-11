@@ -66,17 +66,17 @@ class DeviceController extends Controller
 
         //find device
         $device = Device::where('userId_fk', $userId)
-        ->where('localId', $deviceId)
+        ->where('deviceId', $deviceId)
         ->first();
 
         if ($request->archive == 'true'){
             //remove foreign key (user no longer attached to this device)
-            $device->userId_fk = NULL;
-            $device->lastUpdateDateTime = now()->toDateTimeString();
-            $device->archiveDateTime = now()->toDateTimeString();
+            $device->userId_fk = 0;
+            $device->lastUpdateDateTime = $request->input('lastUpdateDateTime');
+            $device->archiveDateTime = $request->input('archiveDateTime');
         } else {
             $device->deviceName = $request->input('deviceName');
-            $device->lastUpdateDateTime = now()->toDateTimeString();
+            $device->lastUpdateDateTime = $request->input('lastUpdateDateTime');
         }
 
         //save updated device

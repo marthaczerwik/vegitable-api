@@ -14,9 +14,10 @@ class NotificationLogController extends Controller
     public function createLog(Request $request){
         //create new notification log object
         $log = new NotificationLog();
-        $log->localId =$reuest->input('notificationLogId');
+        $log->localId = null;
         $log->notificationType = $request->input('notificationType');
         $log->notificationTime = $request->input('notificationTime');
+        $log->notificationMessage = $request->input('notificationMessage');
         $log->createDateTime = $request->input('createDateTime');
         $log->lastUpdateDateTime = $request->input('lastUpdateDateTime');
         $log->bucketId_fk = $request->input('bucketId_fk');
@@ -32,9 +33,9 @@ class NotificationLogController extends Controller
     /**
      * Return all notification logs
      */
-    public function getLogs($bucketId, $userId){
-      $logs = NotificationLog::where('bucketId_fk', $bucketId)
-      ->where('userId_fk', $userId)
+    public function getLogs($userId, $type){
+      $logs = NotificationLog::where('userId_fk', $userId)
+      ->where('notificationType', $type)
       ->get();
       return response()->json($logs);
     }
