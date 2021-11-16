@@ -10,34 +10,6 @@ use Illuminate\Support\Facades\DB;
 class BucketController extends Controller
 {
     /**
-     * Function to update the thresholds (min and max) for the bucket overall, based on the threshold values of all the plants within it.
-     * TODO: move to android code
-     */
-    /*
-     public function updateThresholds($bucketId){
-
-        $bucket = Bucket::find($bucketId);
-
-        $plantCollection = Plant::where('bucketId_fk', $bucketId)->get();
-
-        //if the bucket is not empty
-        if ($plantCollection){
-            $bucket->temperatureMin = $plantCollection->pluck('temperatureMin')->max();
-            $bucket->temperatureMax = $plantCollection->pluck('temperatureMax')->min();
-            $bucket->phMin = $plantCollection->pluck('phMin')->max();
-            $bucket->phMax = $plantCollection->pluck('phMax')->min();
-            $bucket->ppmMin = $plantCollection->pluck('ppmMin')->max();
-            $bucket->ppmMax = $plantCollection->pluck('ppmMax')->min();
-            $bucket->lightMin = $plantCollection->pluck('lightMin')->max();
-            $bucket->lightMax = $plantCollection->pluck('lightMax')->min();
-            $bucket->humidityMin = $plantCollection->pluck('humidityMin')->max();
-            $bucket->humidityMax = $plantCollection->pluck('humidityMax')->min();
-        }
-
-        return $bucket;
-    }*/
-
-    /**
      * For creating a new bucket
      * TODO: error handling if cannot be saved to db
      */
@@ -76,14 +48,16 @@ class BucketController extends Controller
         $updatedBucket->imageURL = $request->input('imageURL');
         $updatedBucket->lastUpdateDateTime = $request->input('lastUpdateDateTime');
         $updatedBucket->deviceId_fk = $request->input('deviceId_fk');
-
-
-        /* MOVING THIS TO ANDROID CODE
-        //TODO: add try catch to ensure nothing gets saved unless update is possible (if existing plants have incompatible min/max with the new bucket min/max, need to return error)
-            
-            //update the bucket threshold values
-            $updatedBucket = $this->updateThresholds($id);
-        */
+        $updatedBucket->temperatureMin = $request->input('temperatureMin');
+        $updatedBucket->temperatureMax = $request->input('temperatureMax');
+        $updatedBucket->phMin = $request->input('phMin');
+        $updatedBucket->phMax = $request->input('phMax');
+        $updatedBucket->ppmMin = $request->input('ppmMin');
+        $updatedBucket->ppmMax = $request->input('ppmMax');
+        $updatedBucket->lightMin = $request->input('lightMin');
+        $updatedBucket->lightMax = $request->input('lightMax');
+        $updatedBucket->humidityMin = $request->input('humidityMin');
+        $updatedBucket->humidityMax = $request->input('humidityMax');
 
         //save the updated bucket to the db
         $updatedBucket->save();
@@ -120,8 +94,6 @@ class BucketController extends Controller
         ->first();
 
         //archive
-        //$bucket->archiveDateTime = now()->toDateTimeString();
-        //$bucket->lastUpdateDateTime = now()->toDateTimeString();
         $bucket->archiveDateTime = $request-> input('archiveDateTime');
         $bucket->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
 

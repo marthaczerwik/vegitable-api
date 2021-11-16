@@ -18,8 +18,9 @@ class UserController extends Controller
         $password = urldecode($request->password);
 
         $user = User::where('userEmail', $email)->first();
-
+        //echo Hash::make($password);
         if (Hash::check($password, $user->userPassword)) {
+            
             return response()->json($user);
         } 
     }
@@ -72,14 +73,17 @@ class UserController extends Controller
         $user = User::find($id);
         
         $user->userEmail = $request->input('userEmail');
-        $user->userPassword = $request->input('userPassword');
+        if (trim($request->input('userPassword')) != ""){
+            echo "password included in update";
+            $user->userPassword = Hash::make($request->input('userPassword'));
+        }
         $user->userFirstName = $request->input('userFirstName');
         $user->userLastName = $request->input('userLastName');
         $user->imageURL = $request->input('imageURL');
         $user->lastUpdateDateTime = now()->toDateTimeString();
-        $user->save();
+        //$user->save();
 
-        return response()->json($user);
+        //return response()->json($user);
     }
 
     /**

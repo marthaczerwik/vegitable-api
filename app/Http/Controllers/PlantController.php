@@ -8,36 +8,6 @@ use App\Models\Bucket;
 
 class PlantController extends Controller
 {
-    
-    /**
-     * Function to update the thresholds (min and max) for the bucket overall, based on the threshold values of all the plants within it.
-     * TODO: move into android code
-     */
-    /*
-    public function updateThresholds($bucketId){
-
-        $bucket = Bucket::find($bucketId);
-
-        $plantCollection = Plant::where('bucketId_fk', $bucketId)->get();
-
-        //if the bucket is not empty
-        if ($plantCollection){
-            $bucket->temperatureMin = $plantCollection->pluck('temperatureMin')->max();
-            $bucket->temperatureMax = $plantCollection->pluck('temperatureMax')->min();
-            $bucket->phMin = $plantCollection->pluck('phMin')->max();
-            $bucket->phMax = $plantCollection->pluck('phMax')->min();
-            $bucket->ppmMin = $plantCollection->pluck('ppmMin')->max();
-            $bucket->ppmMax = $plantCollection->pluck('ppmMax')->min();
-            $bucket->lightMin = $plantCollection->pluck('lightMin')->max();
-            $bucket->lightMax = $plantCollection->pluck('lightMax')->min();
-            $bucket->humidityMin = $plantCollection->pluck('humidityMin')->max();
-            $bucket->humidityMax = $plantCollection->pluck('humidityMax')->min();
-        }
-
-        return $bucket;
-    }
-    */
-
     /**
      * Return single plant to viewplant data
      */
@@ -56,6 +26,11 @@ class PlantController extends Controller
     public function createPlant(Request $request){
         //create new plant object
         $plant = new Plant();
+
+        //get remote id of bucket
+        $bucket = Bucket::where('userId_fk', $request->input('userId_fk'))
+        ->where('localId', $request->input('bucketId_fk'))
+        ->first();
         
         //assign values based on request input
         $plant->localId = $request->input('plantId');
@@ -76,7 +51,7 @@ class PlantController extends Controller
         $plant->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
         $plant->archiveDateTime = $request->input('archiveDateTime');
         $plant->imageURL = $request->input('imageURL');
-        $plant->bucketId_fk = $request->input('bucketId_fk');
+        $plant->bucketId_fk = $bucket->bucketId;
         $plant->userId_fk = $request->input('userId_fk');
 
         //save the created plant in the db
@@ -97,8 +72,7 @@ class PlantController extends Controller
         ->where('localId', $plantId)
         ->first();
 
-        //update values based on request input
-        $plant->localId = $request->input('plantId');
+        //update values based on request input        
         $plant->plantType = $request->input('plantType');
         $plant->plantName = $request->input('plantName');
         $plant->temperatureMin = $request->input('temperatureMin');
@@ -114,7 +88,6 @@ class PlantController extends Controller
         $plant->plantPhase = $request->input('plantPhase');
         $plant->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
         $plant->imageURL = $request->input('imageURL');
-        $plant->bucketId_fk = $request->input('bucketId_fk');
 
         //save the plant in db
         $plant->save();
@@ -139,29 +112,18 @@ class PlantController extends Controller
      * To archive a plant
      * TODO: error handling if cannot be saved to db, if plant id doesn't exist (optional)
      */
-    public function deletePlant($userId, $plantId){
+    public function deletePlant(Request $request, $userId, $plantId){
         //find the requested plant
         $plant = Plant::where('userId_fk', $userId)
         ->where('localId', $plantId)
         ->first();
 
         //update the archive date
-        //$plant->archiveDateTime = now()->toDateTimeString();
-        //$plant->lastUpdateDateTime = now()->toDateTimeString();
         $plant->archiveDateTime = $request-> input('archiveDateTime');
         $plant->lastUpdateDateTime = $request-> input('lastUpdateDateTime');
 
         //save to db
         $plant->save();
-
-        /* moving to android code
-        //get bucket the plant is in
-        $bucket = Bucket::where('bucketId', $plant->bucketId_fk)->get();
-
-        //update the bucket threshold values and save the returned bucket
-        $bucket = $this->updateThresholds($bucket->bucketId);
-        $bucket->save();
-        */
 
     }
 }
