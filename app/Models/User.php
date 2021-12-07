@@ -11,10 +11,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    //database informatio
     protected $table = 'Users';
     protected $primaryKey = 'userId';
     public $timestamps = false;
 
+    //map to fields found in the database table
     protected $fillable =[
         'localId',
         'userEmail',
@@ -27,6 +29,7 @@ class User extends Authenticatable
         'archiveDateTime'
     ];
 
+    //cast any variables to the proper data type, as they may come in as strings
     protected $casts = [
         'localId' => 'int'
     ];

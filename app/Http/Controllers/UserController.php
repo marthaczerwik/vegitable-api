@@ -18,7 +18,7 @@ class UserController extends Controller
         $password = urldecode($request->password);
 
         $user = User::where('userEmail', $email)->first();
-        //echo Hash::make($password);
+
         if (Hash::check($password, $user->userPassword)) {
             
             return response()->json($user);
@@ -81,9 +81,9 @@ class UserController extends Controller
         $user->userLastName = $request->input('userLastName');
         $user->imageURL = $request->input('imageURL');
         $user->lastUpdateDateTime = now()->toDateTimeString();
-        //$user->save();
+        $user->save();
 
-        //return response()->json($user);
+        return response()->json($user);
     }
 
     /**
